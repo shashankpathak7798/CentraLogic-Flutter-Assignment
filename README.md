@@ -3,14 +3,11 @@
 A new Flutter project.
 
 ## Getting Started
+Screenshots for Web/Tab UI:
+![image](https://github.com/shashankpathak7798/CentraLogic-Flutter-Assignment/assets/75470416/69b48aac-437b-4389-a58e-ceedc83d19d6)
+![image](https://github.com/shashankpathak7798/CentraLogic-Flutter-Assignment/assets/75470416/638a228c-322d-4f00-82a6-f9e955c1f78e)
+![image](https://github.com/shashankpathak7798/CentraLogic-Flutter-Assignment/assets/75470416/80ff416e-889a-445c-bb0d-012130a0c324)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+https://github.com/shashankpathak7798/CentraLogic-Flutter-Assignment/assets/75470416/a66941fd-963d-4fb9-8df2-e3799122e41c
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
