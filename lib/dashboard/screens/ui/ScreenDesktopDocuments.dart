@@ -507,7 +507,7 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
 
 
 }
-
+/// This functions are declared with global scope as they are used at both places i.e in the ScreenDesktopDocuments and ScreenMobileDocuments screens, this is done to avoid re-write of the code
 /// Function to build the other tabs i.e the team, tax and joining tabs
 buildOtherTabs({required List<Joining> documents}) => SizedBox(
   width: double.infinity,
