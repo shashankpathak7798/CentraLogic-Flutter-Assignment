@@ -131,7 +131,8 @@ class FormWidget extends StatelessWidget {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => BlocProvider<AddUserBloc>(
                       create: (context) => AddUserBloc(),
-                      child: const ScreenHomeScreen(),
+                      child: const
+                      ScreenHomeScreen(),
                     ),
                   ));
                 });

@@ -1,8 +1,10 @@
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
 import 'package:assignment_1/dashboard/models/ModelDocuments.dart';
 import 'package:flutter/material.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 
 import '../../../utils/ThemeColors.dart';
 
@@ -181,30 +183,41 @@ class ScreenMobileViewTransaction extends StatelessWidget {
                   /// IconButton widget to open the transaction document
                   trailing: IconButton(
                     onPressed: () async {
+                      /// loading the pdf from the url using http get method
+                      final res = await http.get(Uri.parse(transaction.documents[index].url));
+                      /// getting the bytes from the response body
+                      final bytes = res.bodyBytes;
+                      /// getting the application directory
+                      final dir = await getApplicationDocumentsDirectory();
+                      /// creating a file with the name dummyPdf.pdf
+                      final file = File("${dir.path}dummyPdf.pdf");
+                      /// writing the bytes to the file
+                      await file.writeAsBytes(bytes, flush: true);
                       /// Open the file
-                      try {
-                        /// check if the file can be launched
-                        if(await canLaunchUrl(Uri.parse(transaction.documents[index].url))) {
-                          /// Launch the file if it can be launched
-                          await launchUrl(Uri.parse(transaction.documents[index].url), mode: LaunchMode.externalApplication,);
-                        }
-                      } catch (e) {
-                        /// If the file is not found, then display the error message
-                        scaffoldMessengerContext.showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "File not found",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Roboto",
-                                fontWeight: FontWeight.w400,
-                                color: ThemeColors.fontPrimaryDark,
-                              ),
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Scaffold(
+                            appBar: AppBar(
+                              automaticallyImplyLeading: true,
                             ),
-                            backgroundColor: ThemeColors.primary,
+                            body: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromRGBO(
+                                    48,
+                                    48,
+                                    48,
+                                    0.05,
+                                  ),
+                                  width: 1,
+                                ),
+                              ),
+                              child: PdfView(path: file.path,),),
                           ),
-                        );
-                      }
+                        ),
+                      );
                     },
                     icon: Icon(
                       Icons.remove_red_eye_outlined,

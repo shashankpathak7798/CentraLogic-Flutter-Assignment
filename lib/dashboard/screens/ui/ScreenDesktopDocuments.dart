@@ -1,6 +1,12 @@
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+
 import 'package:assignment_1/dashboard/models/ModelDocuments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/documents/document_bloc.dart';
@@ -78,10 +84,15 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
   buildTabBar() => Container(
         width: 728,
         height: 50,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      color: const Color.fromRGBO(242, 242, 242, 1,),
-    ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color.fromRGBO(
+            242,
+            242,
+            242,
+            1,
+          ),
+        ),
         child: TabBar(
           indicatorSize: TabBarIndicatorSize.tab,
           labelColor: Colors.white,
@@ -130,7 +141,9 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
                   documents: DocumentsData.joining,
                 );
               }
-              return buildOtherTabs(documents: DocumentsData.joining,);
+              return buildOtherTabs(
+                documents: DocumentsData.joining,
+              );
             },
           ),
 
@@ -138,9 +151,13 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
           BlocBuilder<DocumentBloc, DocumentsState>(
             builder: (context, state) {
               if (state is DocumentsFetchedState) {
-                return buildTransactionsTab(transactions: DocumentsData.transactions,);
+                return buildTransactionsTab(
+                  transactions: DocumentsData.transactions,
+                );
               }
-              return buildTransactionsTab(transactions: DocumentsData.transactions,);
+              return buildTransactionsTab(
+                transactions: DocumentsData.transactions,
+              );
             },
           ),
 
@@ -152,7 +169,9 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
                   documents: DocumentsData.team,
                 );
               }
-              return buildOtherTabs(documents: DocumentsData.team,);
+              return buildOtherTabs(
+                documents: DocumentsData.team,
+              );
             },
           ),
 
@@ -164,7 +183,9 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
                   documents: DocumentsData.tax,
                 );
               }
-              return buildOtherTabs(documents: DocumentsData.tax,);
+              return buildOtherTabs(
+                documents: DocumentsData.tax,
+              );
             },
           ),
         ],
@@ -183,94 +204,98 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
             return BlocProvider.value(
               value: documentBloc,
               child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                /// ListTile to display the Transaction document address and transaction ID
-                ListTile(
-                  titleAlignment: ListTileTitleAlignment.center,
-                  shape: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(
-                        48,
-                        48,
-                        48,
-                        0.05,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// ListTile to display the Transaction document address and transaction ID
+                  ListTile(
+                    titleAlignment: ListTileTitleAlignment.center,
+                    shape: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(
+                          48,
+                          48,
+                          48,
+                          0.05,
+                        ),
+                        width: 1,
                       ),
-                      width: 1,
                     ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                  ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                    ),
 
-                  /// Document Title
-                  title: getTitleText(transactions[index].address),
+                    /// Document Title
+                    title: getTitleText(transactions[index].address),
 
-                  /// Document Transaction ID
-                  subtitle: getSubtitleText(
-                    "Transaction ID #${transactions[index].transactionId}",
-                  ),
+                    /// Document Transaction ID
+                    subtitle: getSubtitleText(
+                      "Transaction ID #${transactions[index].transactionId}",
+                    ),
 
-                  /// Trailing icon to preview the document
-                  trailing: BlocBuilder<DocumentBloc, DocumentsState>(
-                    builder: (context, state) {
-                      if (state is ShowTransactionDocumentsState) {
+                    /// Trailing icon to preview the document
+                    trailing: BlocBuilder<DocumentBloc, DocumentsState>(
+                      builder: (context, state) {
+                        if (state is ShowTransactionDocumentsState) {
+                          return IconButton(
+                            onPressed: () {
+                              /// Dispatching the event to Hide the transaction documents
+                              BlocProvider.of<DocumentBloc>(context).add(
+                                HideTransactionDocumentsEvent(
+                                  transactionId:
+                                      transactions[index].transactionId,
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.keyboard_arrow_up,
+                              color: Colors.grey,
+                            ),
+                          );
+                        }
+
+                        /// returning the default icon if the state is not ShowTransactionDocumentsState
                         return IconButton(
                           onPressed: () {
-                            /// Dispatching the event to Hide the transaction documents
+                            /*debugPrint("Transaction ID: ${transactions[index].transactionId}");
+                          debugPrint("Transactions: ${transactions[index].documents}");*/
+
+                            /// Dispatching the event to load the transaction documents
                             BlocProvider.of<DocumentBloc>(context).add(
-                              HideTransactionDocumentsEvent(
-                                transactionId: transactions[index].transactionId,
+                              LoadTransactionDocumentsEvent(
+                                transactionId:
+                                    transactions[index].transactionId,
                               ),
                             );
                           },
                           icon: const Icon(
-                            Icons.keyboard_arrow_up,
+                            Icons.chevron_right,
                             color: Colors.grey,
                           ),
                         );
-                      }
-
-                      /// returning the default icon if the state is not ShowTransactionDocumentsState
-                      return IconButton(
-                        onPressed: () {
-                          /*debugPrint("Transaction ID: ${transactions[index].transactionId}");
-                          debugPrint("Transactions: ${transactions[index].documents}");*/
-
-                          /// Dispatching the event to load the transaction documents
-                          BlocProvider.of<DocumentBloc>(context).add(
-                            LoadTransactionDocumentsEvent(
-                              transactionId: transactions[index].transactionId,
-                            ),
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.chevron_right,
-                          color: Colors.grey,
-                        ),
-                      );
-                    },
+                      },
+                    ),
                   ),
-                ),
 
-                /// Padding
-                const SizedBox(
-                  height: 10,
-                ),
+                  /// Padding
+                  const SizedBox(
+                    height: 10,
+                  ),
 
-                /// call to the function to build the list of documents
-                BlocBuilder<DocumentBloc, DocumentsState>(
-                  builder: (context, state) => state is ShowTransactionDocumentsState &&
-                      state.transactionId == transactions[index].transactionId
-                      ? buildDocumentsTable(
-                    documents: transactions[index].documents,
-                  )
-                      : state is HideTransactionDocumentsState
-                      ? const SizedBox()
-                      : const SizedBox(),
-                ),
-              ],
-                        ),
+                  /// call to the function to build the list of documents
+                  BlocBuilder<DocumentBloc, DocumentsState>(
+                    builder: (context, state) =>
+                        state is ShowTransactionDocumentsState &&
+                                state.transactionId ==
+                                    transactions[index].transactionId
+                            ? buildDocumentsTable(
+                                documents: transactions[index].documents,
+                              )
+                            : state is HideTransactionDocumentsState
+                                ? const SizedBox()
+                                : const SizedBox(),
+                  ),
+                ],
+              ),
             );
           },
           separatorBuilder: (context, index) => const SizedBox(
@@ -360,7 +385,7 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
           width: 1,
         ),
         children: [
-           TableRow(
+          TableRow(
             decoration: const BoxDecoration(
               color: Color.fromRGBO(
                 48,
@@ -370,20 +395,36 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
               ),
             ),
             children: [
-              getHeadTableCell(text: "Document Name",),
-              getHeadTableCell(text: "Checklist Name",),
-              getHeadTableCell(text: "Date & Time",),
-              getHeadTableCell(text: "Status",),
-              getHeadTableCell(text: "Action",),
+              getHeadTableCell(
+                text: "Document Name",
+              ),
+              getHeadTableCell(
+                text: "Checklist Name",
+              ),
+              getHeadTableCell(
+                text: "Date & Time",
+              ),
+              getHeadTableCell(
+                text: "Status",
+              ),
+              getHeadTableCell(
+                text: "Action",
+              ),
             ],
           ),
           ...documents
               .map(
                 (e) => TableRow(
                   children: [
-                    getBodyTableCell(text: e.title,),
-                    getBodyTableCell(text: e.checkListName,),
-                    getBodyTableCell(text: e.date,),
+                    getBodyTableCell(
+                      text: e.title,
+                    ),
+                    getBodyTableCell(
+                      text: e.checkListName,
+                    ),
+                    getBodyTableCell(
+                      text: e.date,
+                    ),
                     TableCell(
                       child: Container(
                         height: 50,
@@ -400,17 +441,17 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
                             fontWeight: FontWeight.w400,
                             backgroundColor: e.status == "Unapproved"
                                 ? const Color.fromRGBO(
-                              255,
-                              0,
-                              0,
-                              0.5,
-                            )
+                                    255,
+                                    0,
+                                    0,
+                                    0.5,
+                                  )
                                 : const Color.fromRGBO(
-                              213,
-                              244,
-                              220,
-                              1,
-                            ),
+                                    213,
+                                    244,
+                                    220,
+                                    1,
+                                  ),
                             color: e.status == "Unapproved"
                                 ? const Color.fromRGBO(
                                     255,
@@ -434,7 +475,10 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
                           /// Opening the document
                           try {
                             if (await canLaunchUrl(Uri.parse(e.url))) {
-                              await launchUrl(Uri.parse(e.url), mode: LaunchMode.externalApplication,);
+                              await launchUrl(
+                                Uri.parse(e.url),
+                                mode: LaunchMode.externalApplication,
+                              );
                             }
                           } catch (e) {
                             debugPrint("Cannot launch url");
@@ -460,158 +504,234 @@ class _ScreenDesktopDocumentsState extends State<ScreenDesktopDocuments> {
     );
   }
 
-
-
   /// Function to build the Heading Table Cell of the Table
   getHeadTableCell({required String text}) => TableCell(
-      child: Container(
-        height: 50,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 15,
-        ),
-        child: Row(
-        children: [
-          Text(text, style: const TextStyle(
-            fontSize: 16,
-            fontFamily: "Roboto",
-            fontWeight: FontWeight.w400,
-            color: Color.fromRGBO(48, 48, 48, 1,),
-          ),),
-          const SizedBox(
-            width: 10,
+        child: Container(
+          height: 50,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 15,
           ),
-          const Icon(Icons.arrow_drop_down, color: Colors.grey,),
-        ],
-      ),
-    ),
-  );
-
+          child: Row(
+            children: [
+              Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: "Roboto",
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromRGBO(
+                    48,
+                    48,
+                    48,
+                    1,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const Icon(
+                Icons.arrow_drop_down,
+                color: Colors.grey,
+              ),
+            ],
+          ),
+        ),
+      );
 
   /// function to build the body table cell of the table
   getBodyTableCell({required String text}) => TableCell(
-      child: Container(
-        height: 50,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 15,
+        child: Container(
+          height: 50,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 15,
+          ),
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 16,
+              fontFamily: "Roboto",
+              fontWeight: FontWeight.w400,
+              color: Color.fromRGBO(
+                94,
+                94,
+                94,
+                1,
+              ),
+            ),
+          ),
         ),
-        child: Text(text, style: const TextStyle(
-        fontSize: 16,
-        fontFamily: "Roboto",
-        fontWeight: FontWeight.w400,
-        color: Color.fromRGBO(94, 94, 94, 1,),
-      ),),
-    ),
-  );
-
-
+      );
 }
+
 /// This functions are declared with global scope as they are used at both places i.e in the ScreenDesktopDocuments and ScreenMobileDocuments screens, this is done to avoid re-write of the code
 /// Function to build the other tabs i.e the team, tax and joining tabs
 buildOtherTabs({required List<Joining> documents}) => SizedBox(
-  width: double.infinity,
-  height: double.infinity,
-  child: ListView.separated(
-    itemBuilder: (context, index) => ListTile(
-      titleAlignment: ListTileTitleAlignment.center,
-      shape: const UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Color.fromRGBO(
-            48,
-            48,
-            48,
-            0.05,
+      width: double.infinity,
+      height: double.infinity,
+      child: ListView.separated(
+        itemBuilder: (context, index) => ListTile(
+          titleAlignment: ListTileTitleAlignment.center,
+          shape: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromRGBO(
+                48,
+                48,
+                48,
+                0.05,
+              ),
+              width: 1,
+            ),
           ),
-          width: 1,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+          ),
+
+          /// Container to display the PDF icon
+          leading: Container(
+            width: 35,
+            height: 35,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(05),
+              color: const Color.fromRGBO(
+                252,
+                227,
+                205,
+                1,
+              ),
+            ),
+            padding: const EdgeInsets.all(07),
+            child: Image.asset("assets/file_pdf.png"),
+          ),
+
+          /// Title of the document
+          title: getTitleText(documents[index].title),
+
+          /// Subtitle of the document
+          subtitle: getSubtitleText(documents[index].size),
+
+          /// Trailing icon to preview the document
+          trailing: IconButton(
+            onPressed: () async {
+              /// Opening the document
+              openPdf(
+                documents[index].url,
+                context,
+              );
+            },
+            icon: const Icon(
+              Icons.remove_red_eye_outlined,
+              color: Color.fromRGBO(
+                35,
+                97,
+                219,
+                1,
+              ),
+            ),
+          ),
+        ),
+        separatorBuilder: (context, index) => const SizedBox(
+          height: 10,
+        ),
+        itemCount: documents.length,
+      ),
+    );
+
+/// Function to open the PDF
+openPdf(String url, BuildContext context) async {
+  /*if (MediaQuery.of(context).size.width < 400) {
+    /// Navigating to the PDFView screen
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
+          ),
+          body: PdfView(path: url),
         ),
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 12,
-      ),
+    );
+  } else {*/
 
-      /// Container to display the PDF icon
-      leading: Container(
-        width: 35,
-        height: 35,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(05),
-          color: const Color.fromRGBO(
-            252,
-            227,
-            205,
-            1,
+  if(MediaQuery.of(context).size.width < 400) {
+    final res = await http.get(Uri.parse(url));
+    final bytes = res.bodyBytes;
+
+    final dir = await getApplicationDocumentsDirectory();
+
+    final file = File("${dir.path}dummyPdf.pdf");
+    await file.writeAsBytes(bytes, flush: true);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: true,
           ),
-        ),
-        padding: const EdgeInsets.all(07),
-        child: Image.asset("assets/file_pdf.png"),
-      ),
-
-      /// Title of the document
-      title: getTitleText(documents[index].title),
-
-      /// Subtitle of the document
-      subtitle: getSubtitleText(documents[index].size),
-
-      /// Trailing icon to preview the document
-      trailing: IconButton(
-        onPressed: () async {
-          /// Opening the document
-          try {
-            if (await canLaunchUrl(Uri.parse(documents[index].url))) {
-              await launchUrl(Uri.parse(documents[index].url), mode: LaunchMode.externalApplication,);
-            }
-          } catch (e) {
-            debugPrint("Cannot launch url");
-          }
-        },
-        icon: const Icon(
-          Icons.remove_red_eye_outlined,
-          color: Color.fromRGBO(
-            35,
-            97,
-            219,
-            1,
-          ),
+          body: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color.fromRGBO(
+                    48,
+                    48,
+                    48,
+                    0.05,
+                  ),
+                  width: 1,
+                ),
+              ),
+              child: PdfView(path: file.path,),),
         ),
       ),
-    ),
-    separatorBuilder: (context, index) => const SizedBox(
-      height: 10,
-    ),
-    itemCount: documents.length,
-  ),
-);
+    );
 
+  }
+
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(
+          Uri.parse(url),
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      debugPrint("Cannot launch url");
+    }
+  //}
+}
 
 /// Function to get the Title Text Widget
 getTitleText(String text) => Text(
-  text,
-  style: const TextStyle(
-    fontSize: 14,
-    fontFamily: "Roboto",
-    fontWeight: FontWeight.w400,
-    color: Color.fromRGBO(
-      48,
-      48,
-      48,
-      1,
-    ),
-  ),
-);
+      text,
+      style: const TextStyle(
+        fontSize: 14,
+        fontFamily: "Roboto",
+        fontWeight: FontWeight.w400,
+        color: Color.fromRGBO(
+          48,
+          48,
+          48,
+          1,
+        ),
+      ),
+    );
 
 /// Function to get the Subtitle Text Widget
 getSubtitleText(String text) => Text(
-  text,
-  style: const TextStyle(
-    fontSize: 12,
-    fontFamily: "Roboto",
-    fontWeight: FontWeight.w400,
-    color: Color.fromRGBO(
-      128,
-      128,
-      128,
-      1,
-    ),
-  ),
-);
+      text,
+      style: const TextStyle(
+        fontSize: 12,
+        fontFamily: "Roboto",
+        fontWeight: FontWeight.w400,
+        color: Color.fromRGBO(
+          128,
+          128,
+          128,
+          1,
+        ),
+      ),
+    );
