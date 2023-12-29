@@ -1,12 +1,12 @@
-import 'package:assignment_1/dashboard/bloc/add_user/add_user_bloc.dart';
 import 'package:assignment_1/dashboard/bloc/documents/document_bloc.dart';
 import 'package:assignment_1/dashboard/bloc/window_controller/window_controller_bloc.dart';
 import 'package:assignment_1/dashboard/screens/ScreenHomeTab.dart';
+import 'package:assignment_1/feedback_bot/bloc/feedback_bot_bloc.dart';
+import 'package:assignment_1/feedback_bot/screens/ScreenFeedbackBot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/ThemeColors.dart';
-import '../../bloc/documents/document_event.dart';
 import '../../bloc/window_controller/window_controller_event.dart';
 import '../../bloc/window_controller/window_controller_state.dart';
 import 'ScreenDesktopDocuments.dart';
@@ -32,6 +32,8 @@ class ViewDesktop extends StatelessWidget {
     },
   ];
 
+  BuildContext? contextMain;
+
   final Widget selectedTab = const ScreenHomeTab();
 
   Size? mediaQuery;
@@ -39,6 +41,7 @@ class ViewDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQuery =  MediaQuery.of(context).size;
+    contextMain = context;
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -168,13 +171,28 @@ class ViewDesktop extends StatelessWidget {
                   ),),
                 ),
               ),
+
+
+            /// Displaying the button to open the feedback bot
+            GestureDetector(
+              onTap: () {
+                /// Navigate to the feedback bot screen
+                Navigator.of(contextMain!).push(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                        create: (context) => FeedbackBotBloc(),
+                        child: const ScreenFeedbackBot(),),
+                  ),);
+              },
+              child: Image.asset("assets/bot_logo.png", width: MediaQuery.of(contextMain!).size.width * 0.1,),
+            ),
           ],
         ),
       );
 
 
   /// Function to build the icon
-  getTabIcon({required String iconPath, Color color = const Color.fromRGBO(
+  getTabIcon({required String iconPath, Color? color = const Color.fromRGBO(
     48,
     48,
     48,

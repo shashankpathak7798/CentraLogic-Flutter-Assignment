@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../feedback_bot/screens/ScreenFeedbackBot.dart';
 import 'device_layout/desktop_layout.dart';
 import 'device_layout/mobile_layout.dart';
 
@@ -15,9 +16,9 @@ class ScreenMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     debugPrint("Screen size: ${MediaQuery.of(context).size}");
-      /// if the screen size greater than 840, then return the desktop layout
-      /// if the screen size less than 400, then return the mobile layout
-      return isMobile(context) ? const MobileLayout() : const DesktopLayout();
-  }
 
+    /// if the screen size greater than 840, then return the desktop layout
+    /// if the screen size less than 400, then return the mobile layout
+    return isMobile(context) ? const MobileLayout() : const DesktopLayout();
+  }
 }
