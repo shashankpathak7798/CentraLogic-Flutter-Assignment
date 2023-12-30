@@ -2,7 +2,7 @@ import 'package:assignment_1/dashboard/models/ModelDocuments.dart';
 import 'package:assignment_1/utils/ThemeColors.dart';
 import 'package:flutter/material.dart';
 
-import 'ScreenMobileViewTransaction.dart';
+import '../ScreenMobileViewTransaction.dart';
 
 class WidgetMobileTransactionDocuments extends StatelessWidget {
   const WidgetMobileTransactionDocuments({

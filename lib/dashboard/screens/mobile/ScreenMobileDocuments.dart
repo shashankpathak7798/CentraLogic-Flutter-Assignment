@@ -1,11 +1,11 @@
 import 'package:assignment_1/dashboard/bloc/documents/document_event.dart';
+import 'package:assignment_1/dashboard/screens/mobile/widgets/WidgetMobileListDocuments.dart';
+import 'package:assignment_1/dashboard/screens/mobile/widgets/WidgetMobileTransactionDocuments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/ThemeColors.dart';
 import '../../bloc/documents/document_bloc.dart';
-import 'WidgetMobileListDocuments.dart';
-import 'WidgetMobileTransactionDocuments.dart';
 
 class ScreenMobileDocuments extends StatefulWidget {
   const ScreenMobileDocuments({super.key});

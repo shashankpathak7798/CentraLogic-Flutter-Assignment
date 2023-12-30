@@ -2,7 +2,7 @@ import 'package:assignment_1/feedback_bot/bloc/feedback_bot_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../dashboard/models/MessageModel.dart';
+import '../models/MessageModel.dart';
 import '../../utils/ThemeColors.dart';
 import '../bloc/feedback_bot_bloc.dart';
 import '../bloc/feedback_bot_event.dart';
@@ -57,7 +57,6 @@ class _ScreenFeedbackBotState extends State<ScreenFeedbackBot> {
 
       /// Displaying the chat between the user and the bot
       _buildChatWidget(),
-
     ],
   );
 

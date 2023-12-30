@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../dashboard/models/MessageModel.dart';
+import '../models/MessageModel.dart';
 import '../../utils/ThemeColors.dart';
 
 class ChatItemWidget extends StatelessWidget {

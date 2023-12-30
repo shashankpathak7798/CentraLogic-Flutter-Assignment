@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/ThemeColors.dart';
 import '../../bloc/documents/document_bloc.dart';
 import '../../bloc/window_controller/window_controller_event.dart';
-import '../ScreenHomeTab.dart';
+import '../home/ScreenHomeTab.dart';
 import 'ScreenMobileDocuments.dart';
 
 class ViewMobile extends StatelessWidget {

@@ -1,7 +1,8 @@
 import 'package:assignment_1/home_screen/ScreenMainScreen.dart';
 import 'package:flutter/material.dart';
 
-import 'dashboard/screens/ScreenHomeTab.dart';
+import 'dashboard/screens/home/ScreenHomeTab.dart';
+
 
 void main() {
   runApp(const MyApp());

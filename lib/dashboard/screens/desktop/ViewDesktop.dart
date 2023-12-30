@@ -1,6 +1,5 @@
 import 'package:assignment_1/dashboard/bloc/documents/document_bloc.dart';
 import 'package:assignment_1/dashboard/bloc/window_controller/window_controller_bloc.dart';
-import 'package:assignment_1/dashboard/screens/ScreenHomeTab.dart';
 import 'package:assignment_1/feedback_bot/bloc/feedback_bot_bloc.dart';
 import 'package:assignment_1/feedback_bot/screens/ScreenFeedbackBot.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +8,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/ThemeColors.dart';
 import '../../bloc/window_controller/window_controller_event.dart';
 import '../../bloc/window_controller/window_controller_state.dart';
-import 'ScreenDesktopDocuments.dart';
+import '../desktop/ScreenDesktopDocuments.dart';
+import '../home/ScreenHomeTab.dart';
 
-class ViewDesktop extends StatelessWidget {
-  ViewDesktop({super.key});
+class ViewDesktop extends StatefulWidget {
+  const ViewDesktop({super.key});
 
+  @override
+  State<ViewDesktop> createState() => _ViewDesktopState();
+}
+
+class _ViewDesktopState extends State<ViewDesktop> {
   final List tabs = [
     {
       "name": "Home",
@@ -190,7 +195,6 @@ class ViewDesktop extends StatelessWidget {
         ),
       );
 
-
   /// Function to build the icon
   getTabIcon({required String iconPath, Color? color = const Color.fromRGBO(
     48,
@@ -202,7 +206,6 @@ class ViewDesktop extends StatelessWidget {
     /// Setting the color of the icon based on the isSelected value
     color: color,
   );
-
 
   /// Function to build Text Widget
   getTextWidget({required String text, Color color = const Color.fromRGBO(
@@ -219,6 +222,4 @@ class ViewDesktop extends StatelessWidget {
       color: color,
     ),
   );
-
-
 }

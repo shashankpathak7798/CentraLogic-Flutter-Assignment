@@ -1,9 +1,10 @@
-import 'package:assignment_1/dashboard/screens/ui/ViewDesktop.dart';
-import 'package:assignment_1/dashboard/screens/ui/ViewMobile.dart';
+
+import 'package:assignment_1/dashboard/screens/mobile/ViewMobile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/window_controller/window_controller_bloc.dart';
+import '../../bloc/window_controller/window_controller_bloc.dart';
+import '../desktop/ViewDesktop.dart';
 
 class ScreenHomeScreen extends StatelessWidget {
   const ScreenHomeScreen({super.key,});

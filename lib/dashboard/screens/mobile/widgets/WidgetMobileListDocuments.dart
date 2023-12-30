@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/ModelDocuments.dart';
-import 'ScreenDesktopDocuments.dart';
+import '../../../models/ModelDocuments.dart';
+import '../../desktop/ScreenDesktopDocuments.dart';
 
 class WidgetMobileListDocuments extends StatelessWidget {
   const WidgetMobileListDocuments({

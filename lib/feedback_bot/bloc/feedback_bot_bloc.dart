@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:assignment_1/dashboard/models/MessageModel.dart';
+import 'package:assignment_1/feedback_bot/models/MessageModel.dart';
 import 'package:assignment_1/feedback_bot/bloc/feedback_bot_event.dart';
 import 'package:assignment_1/feedback_bot/bloc/feedback_bot_state.dart';
 import 'package:flutter/material.dart';

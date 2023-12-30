@@ -1,4 +1,4 @@
-import 'package:assignment_1/dashboard/models/MessageModel.dart';
+import 'package:assignment_1/feedback_bot/models/MessageModel.dart';
 
 abstract class FeedbackBotState {}
 

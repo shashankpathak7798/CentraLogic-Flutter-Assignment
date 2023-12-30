@@ -3,8 +3,9 @@ import 'package:assignment_1/dashboard/bloc/add_user/add_user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/add_user/add_user_event.dart';
-import '../models/user_model.dart';
+import '../../bloc/add_user/add_user_event.dart';
+import '../../models/user_model.dart';
+
 
 class ScreenHomeTab extends StatefulWidget {
   const ScreenHomeTab({super.key});
